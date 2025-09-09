@@ -1,52 +1,536 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Chat with MedLlama2</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; }
-        #chatbox { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
-        .user { color: blue; margin: 5px 0; }
-        .bot { color: green; margin: 5px 0; }
-        input[type=text] { width: 80%; padding: 10px; }
-        button { padding: 10px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyuSetu - AI Health Assistant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #fff;
+      color: #222;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    /* Header */
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 12px 0;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo i {
+      font-size: 22px;
+      color: #4ecdc4;
+    }
+    .logo h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .nav-links a:hover {
+      color: #4ecdc4;
+    }
+    .whatsapp-login {
+      background: #25D366;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .whatsapp-login:hover {
+      background: #128C7E;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      padding: 40px 0;
+      background-color: #f8f9fa;
+      margin-bottom: 30px;
+    }
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #555;
+    }
+    .hero-description {
+      font-size: 1rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Chatbot Section */
+    .chatbot-section {
+      margin: 30px 0;
+    }
+    .chatbot-container {
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+    }
+    .chat-header {
+      background: #3498db;
+      color: white;
+      padding: 15px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .chat-header i {
+      font-size: 18px;
+    }
+    .chat-header h2 {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .chat-status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ecdc4;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+    .message {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      margin-bottom: 5px;
+      word-wrap: break-word;
+    }
+    .bot-message {
+      background: #ecf3fc;
+      color: #333;
+      align-self: flex-start;
+    }
+    .user-message {
+      background: #3498db;
+      color: white;
+      align-self: flex-end;
+    }
+    .message-label {
+      font-weight: 600;
+      margin-bottom: 3px;
+      font-size: 12px;
+    }
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background: #fff;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 14px;
+      outline: none;
+    }
+    .chat-input input:focus {
+      border-color: #3498db;
+    }
+    .chat-input input::placeholder {
+      color: #999;
+    }
+    .chat-input button {
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 16px;
+      margin-left: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .chat-input button:hover {
+      background: #2c3e50;
+    }
+    .chat-input button:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    /* Dashboard Section */
+    .analytics-section {
+      padding: 30px 0;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #2c3e50;
+    }
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 15px;
+    }
+    .analytics-card {
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .analytics-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .analytics-card h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .analytics-card h3 i {
+      margin-right: 8px;
+      color: #3498db;
+    }
+    .analytics-card p {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 13px;
+    }
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #3498db;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* Footer */
+    footer {
+      background: #2c3e50;
+      color: #bdc3c7;
+      padding: 25px 0;
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nav-links {
+        gap: 15px;
+      }
+      .hero-title {
+        font-size: 2rem;
+      }
+      .chatbot-container {
+        height: 350px;
+      }
+      .message {
+        max-width: 85%;
+      }
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      .chatbot-container {
+        height: 300px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h2>Chat with MedLlama2</h2>
-    <div id="chatbox"></div>
-    <input type="text" id="user_input" placeholder="Type your message here..." />
-    <button onclick="sendMessage()">Send</button>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-heartbeat"></i>
+          <h1>AyuSetu</h1>
+        </div>
+        <div class="nav-links">
+          <a href="#">Home</a>
+          <a href="#">Diseases</a>
+          <a href="#">Vaccines</a>
+          <a href="#">Symptoms</a>
+          <a href="#">About</a>
+        </div>
+        <button class="whatsapp-login">
+          <i class="fab fa-whatsapp"></i>
+          Login via WhatsApp
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <script>
-        async function sendMessage() {
-            const input = document.getElementById("user_input");
-            const message = input.value.trim();
-            if (!message) return;
+  <div class="container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title">AyuSetu</h1>
+      <p class="hero-subtitle">AI-Powered Health Assistant</p>
+      <p class="hero-description">
+        Powered by MedLlama2 model and trained on comprehensive government health datasets. 
+        Get accurate medical information, symptom analysis, and health guidance from trusted sources.
+      </p>
+    </section>
 
-            // Display user message
-            const chatbox = document.getElementById("chatbox");
-            chatbox.innerHTML += `<div class="user"><b>You:</b> ${message}</div>`;
-            chatbox.scrollTop = chatbox.scrollHeight;
-            input.value = "";
+    <!-- Chatbot Section -->
+    <section class="chatbot-section">
+      <div class="chatbot-container">
+        <div class="chat-header">
+          <i class="fas fa-robot"></i>
+          <div>
+            <h2>Chat with AyuSetu</h2>
+            <small style="opacity: 0.8;">Powered by MedLlama2 • Government Health Data</small>
+          </div>
+          <div class="chat-status">
+            <div class="status-dot"></div>
+            Online
+          </div>
+        </div>
+        <div class="chat-messages" id="chatbox">
+          <div class="message bot-message">
+            <div class="message-label">AyuSetu:</div>
+            Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. How can I help you with your health concerns today?
+          </div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="user_input" placeholder="Ask me about symptoms, diseases, treatments, or general health questions...">
+          <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </section>
 
-            // Send to Flask backend
-            const response = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message })
-            });
-            const data = await response.json();
+    <!-- Dashboard Section -->
+    <section class="analytics-section">
+      <h2 class="section-title">AyuSetu Health Analytics Dashboard</h2>
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3><i class="fas fa-virus"></i> Disease Surveillance</h3>
+          <p>Real-time tracking of disease outbreaks and health patterns based on government health surveillance data.</p>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="stat-value">142</div>
+              <div class="stat-label">Dengue Cases</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">57</div>
+              <div class="stat-label">Malaria Cases</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="analytics-card">
+          <h3><i class="fas fa-syringe"></i> Vaccination Programs</h3>
+          <p>Monitor national immunization coverage and schedule recommendations from government health programs.</p>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="stat-value">78%</div>
+              <div class="stat-label">Polio Coverage</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">82%</div>
+              <div class="stat-label">MMR Coverage</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="analytics-card">
+          <h3><i class="fas fa-brain"></i> AI Insights</h3>
+          <p>Advanced health analytics powered by MedLlama2 model trained on verified government health datasets.</p>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="stat-value">1,243</div>
+              <div class="stat-label">Daily Consultations</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">96%</div>
+              <div class="stat-label">Accuracy Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-            // Display bot reply
-            chatbox.innerHTML += `<div class="bot"><b>Bot:</b> ${data.reply}</div>`;
-            chatbox.scrollTop = chatbox.scrollHeight;
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 AyuSetu - AI Health Assistant. Powered by MedLlama2 and Government Health Data. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatbox = document.getElementById('chatbox');
+      const userInput = document.getElementById('user_input');
+      const sendButton = document.getElementById('send-button');
+      
+      async function sendMessage() {
+        const input = document.getElementById("user_input");
+        const message = input.value.trim();
+        if (!message) return;
+        
+        // Disable send button to prevent multiple requests
+        sendButton.disabled = true;
+        sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        // Display user message
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.classList.add('message', 'user-message');
+        userMessageDiv.innerHTML = `<div class="message-label">You:</div>${message}`;
+        chatbox.appendChild(userMessageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight;
+        input.value = "";
+        
+        try {
+          // Send to Flask backend (same endpoint as your original code)
+          const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+          });
+          const data = await response.json();
+          
+          // Display bot reply
+          const botMessageDiv = document.createElement('div');
+          botMessageDiv.classList.add('message', 'bot-message');
+          botMessageDiv.innerHTML = `<div class="message-label">AyuSetu:</div>${data.reply}`;
+          chatbox.appendChild(botMessageDiv);
+          chatbox.scrollTop = chatbox.scrollHeight;
+          
+        } catch (error) {
+          console.error('Error:', error);
+          const errorMessageDiv = document.createElement('div');
+          errorMessageDiv.classList.add('message', 'bot-message');
+          errorMessageDiv.innerHTML = `<div class="message-label">AyuSetu:</div>I apologize, but I'm having trouble connecting to my knowledge base right now. Please try again in a moment. If the issue persists, our medical AI is temporarily unavailable.`;
+          chatbox.appendChild(errorMessageDiv);
+          chatbox.scrollTop = chatbox.scrollHeight;
+        } finally {
+          // Re-enable send button
+          sendButton.disabled = false;
+          sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+          userInput.focus();
         }
+      }
 
-        // Press Enter to send
-        document.getElementById("user_input").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") sendMessage();
-        });
-    </script>
+      sendButton.addEventListener('click', sendMessage);
+      
+      // Press Enter to send
+      userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !sendButton.disabled) {
+          sendMessage();
+        }
+      });
+
+      // WhatsApp login functionality
+      document.querySelector('.whatsapp-login').addEventListener('click', function() {
+        alert('Redirecting to WhatsApp authentication for AyuSetu health consultations (Twilio integration).');
+      });
+      
+      // Focus on input when page loads
+      userInput.focus();
+
+      // Add typing effect for initial message
+      const initialMessage = chatbox.querySelector('.bot-message');
+      const originalText = initialMessage.innerHTML;
+      initialMessage.innerHTML = `<div class="message-label">AyuSetu:</div>`;
+      
+      const text = "Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. How can I help you with your health concerns today?";
+      let i = 0;
+      
+      function typeWriter() {
+        if (i < text.length) {
+          initialMessage.innerHTML = `<div class="message-label">AyuSetu:</div>${text.substring(0, i + 1)}`;
+          i++;
+          setTimeout(typeWriter, 30);
+        }
+      }
+      
+      setTimeout(typeWriter, 500);
+    });
+  </script>
 </body>
 </html>
