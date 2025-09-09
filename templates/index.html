@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat with MedLlama2</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; }
+        #chatbox { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        .user { color: blue; margin: 5px 0; }
+        .bot { color: green; margin: 5px 0; }
+        input[type=text] { width: 80%; padding: 10px; }
+        button { padding: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Chat with MedLlama2</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="user_input" placeholder="Type your message here..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById("user_input");
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Display user message
+            const chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML += `<div class="user"><b>You:</b> ${message}</div>`;
+            chatbox.scrollTop = chatbox.scrollHeight;
+            input.value = "";
+
+            // Send to Flask backend
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message })
+            });
+            const data = await response.json();
+
+            // Display bot reply
+            chatbox.innerHTML += `<div class="bot"><b>Bot:</b> ${data.reply}</div>`;
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        // Press Enter to send
+        document.getElementById("user_input").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
+</body>
+</html>
