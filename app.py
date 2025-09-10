@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Ngrok endpoint for your Ollama handler
-NGROK_URL = "https://ce57dee50b07.ngrok-free.app/whatsapp"
+NGROK_URL = "https://dd57d4e4fb6c.ngrok-free.app/whatsapp"
 
 @app.route("/")
 def home():
