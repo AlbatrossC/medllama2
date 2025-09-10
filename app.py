@@ -5,8 +5,9 @@ import os
 
 app = Flask(__name__)
 
-# Ngrok endpoint for your Ollama handler
-NGROK_URL = "https://dd57d4e4fb6c.ngrok-free.app/whatsapp"
+# Point to your ngrok tunnel that exposes server.py
+# server.py handles /chat -> Ollama
+SERVER_URL = "https://dd57d4e4fb6c.ngrok-free.app/chat"
 
 @app.route("/")
 def home():
@@ -16,26 +17,20 @@ def home():
 def chat():
     user_msg = request.json.get("message", "")
 
-    # Send the message to the Ollama endpoint via ngrok
-    payload = {
-        "Body": user_msg,
-        "From": "+10000000000"  # Dummy number
-    }
-    response = requests.post(NGROK_URL, data=payload)
-
-    # Parse Twilio XML response
-    reply_text = "Sorry, I couldn't process that."
     try:
-        from xml.etree import ElementTree as ET
-        root = ET.fromstring(response.text)
-        msg = root.find("Message")
-        if msg is not None:
-            reply_text = msg.text
-    except:
-        pass
+        # Send message in the format server.py expects
+        response = requests.post(SERVER_URL, json={"message": user_msg})
+
+        if response.status_code == 200:
+            data = response.json()
+            reply_text = data.get("reply", "Sorry, I couldn't process that.")
+        else:
+            reply_text = f"Error: server returned {response.status_code}"
+    except Exception as e:
+        reply_text = f"Error connecting to the server: {e}"
 
     return jsonify({"reply": reply_text})
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Use Vercel's port or 8000 locally
+    port = int(os.environ.get("PORT", 8000))
     app.run(host="0.0.0.0", port=port, debug=True)
