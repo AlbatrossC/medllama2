@@ -58,6 +58,31 @@
     .nav-links a:hover {
       color: #4ecdc4;
     }
+    
+    /* Language Selector */
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: 15px;
+    }
+    .language-selector select {
+      background: #34495e;
+      color: white;
+      border: 1px solid #4ecdc4;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    .language-indicator {
+      background: #4ecdc4;
+      color: #2c3e50;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    
     .whatsapp-login {
       background: #25D366;
       color: white;
@@ -183,6 +208,14 @@
       font-weight: 600;
       margin-bottom: 3px;
       font-size: 12px;
+    }
+    .language-tag {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-left: 5px;
+      padding: 2px 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
     }
     .chat-input {
       display: flex;
@@ -337,10 +370,20 @@
           <a href="#">Symptoms</a>
           <a href="#">About</a>
         </div>
-        <button class="whatsapp-login">
-          <i class="fab fa-whatsapp"></i>
-          Login via WhatsApp
-        </button>
+        <div style="display: flex; align-items: center;">
+          <div class="language-selector">
+            <select id="language-select">
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+              <option value="mr">मराठी</option>
+            </select>
+            <div class="language-indicator" id="current-lang">EN</div>
+          </div>
+          <button class="whatsapp-login">
+            <i class="fab fa-whatsapp"></i>
+            Login via WhatsApp
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -353,6 +396,7 @@
       <p class="hero-description">
         Powered by MedLlama2 model and trained on comprehensive government health datasets. 
         Get accurate medical information, symptom analysis, and health guidance from trusted sources.
+        Now supports English, Hindi, and Marathi!
       </p>
     </section>
 
@@ -363,7 +407,7 @@
           <i class="fas fa-robot"></i>
           <div>
             <h2>Chat with AyuSetu</h2>
-            <small style="opacity: 0.8;">Powered by MedLlama2 • Government Health Data</small>
+            <small style="opacity: 0.8;">Powered by MedLlama2 • Government Health Data • Multi-language Support</small>
           </div>
           <div class="chat-status">
             <div class="status-dot"></div>
@@ -372,12 +416,12 @@
         </div>
         <div class="chat-messages" id="chatbox">
           <div class="message bot-message">
-            <div class="message-label">AyuSetu:</div>
-            Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. How can I help you with your health concerns today?
+            <div class="message-label">AyuSetu: <span class="language-tag">Auto-detected</span></div>
+            Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. I can communicate in English, Hindi, and Marathi - just type in your preferred language! How can I help you with your health concerns today?
           </div>
         </div>
         <div class="chat-input">
-          <input type="text" id="user_input" placeholder="Ask me about symptoms, diseases, treatments, or general health questions...">
+          <input type="text" id="user_input" placeholder="Ask me in English, Hindi, or Marathi...">
           <button id="send-button"><i class="fas fa-paper-plane"></i></button>
         </div>
       </div>
@@ -438,7 +482,7 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>&copy; 2024 AyuSetu - AI Health Assistant. Powered by MedLlama2 and Government Health Data. All rights reserved.</p>
+      <p>&copy; 2024 AyuSetu - AI Health Assistant. Powered by MedLlama2 and Government Health Data. Multi-language Support (EN/HI/MR/OR). All rights reserved.</p>
     </div>
   </footer>
 
@@ -447,6 +491,59 @@
       const chatbox = document.getElementById('chatbox');
       const userInput = document.getElementById('user_input');
       const sendButton = document.getElementById('send-button');
+      const languageSelect = document.getElementById('language-select');
+      const currentLangIndicator = document.getElementById('current-lang');
+      
+      // Language management
+      let currentLanguage = 'en';
+      
+      // Load current language from server
+      async function loadCurrentLanguage() {
+        try {
+          const response = await fetch('/get_language');
+          const data = await response.json();
+          currentLanguage = data.language_code;
+          languageSelect.value = currentLanguage;
+          updateLanguageIndicator();
+        } catch (error) {
+          console.log('Could not load language preference:', error);
+        }
+      }
+      
+      function updateLanguageIndicator() {
+        const langMap = {
+          'en': 'EN',
+          'hi': 'हि',
+          'mr': 'मर'
+        };
+        currentLangIndicator.textContent = langMap[currentLanguage] || 'EN';
+      }
+      
+      // Language selector change handler
+      languageSelect.addEventListener('change', async function() {
+        const newLang = this.value;
+        try {
+          const response = await fetch('/set_language', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: newLang })
+          });
+          
+          if (response.ok) {
+            currentLanguage = newLang;
+            updateLanguageIndicator();
+            
+            // Add system message about language change
+            const systemMessageDiv = document.createElement('div');
+            systemMessageDiv.classList.add('message', 'bot-message');
+            systemMessageDiv.innerHTML = `<div class="message-label">System:</div>Language switched to ${this.options[this.selectedIndex].text}. You can continue chatting in your preferred language!`;
+            chatbox.appendChild(systemMessageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
+          }
+        } catch (error) {
+          console.error('Error setting language:', error);
+        }
+      });
       
       async function sendMessage() {
         const input = document.getElementById("user_input");
@@ -466,7 +563,7 @@
         input.value = "";
         
         try {
-          // Send to Flask backend (same endpoint as your original code)
+          // Send to Flask backend
           const response = await fetch("/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -474,12 +571,25 @@
           });
           const data = await response.json();
           
-          // Display bot reply
+          // Display bot reply with language indicator
           const botMessageDiv = document.createElement('div');
           botMessageDiv.classList.add('message', 'bot-message');
-          botMessageDiv.innerHTML = `<div class="message-label">AyuSetu:</div>${data.reply}`;
+          const langTag = data.detected_language ? `<span class="language-tag">${data.detected_language}</span>` : '';
+          botMessageDiv.innerHTML = `<div class="message-label">AyuSetu: ${langTag}</div>${data.reply}`;
           chatbox.appendChild(botMessageDiv);
           chatbox.scrollTop = chatbox.scrollHeight;
+          
+          // Update current language if detected
+          if (data.detected_language) {
+            const langCode = Object.keys({en: 'english', hi: 'hindi', mr: 'marathi'}).find(key => 
+              ({en: 'english', hi: 'hindi', mr: 'marathi'})[key] === data.detected_language.toLowerCase()
+            );
+            if (langCode && langCode !== currentLanguage) {
+              currentLanguage = langCode;
+              languageSelect.value = langCode;
+              updateLanguageIndicator();
+            }
+          }
           
         } catch (error) {
           console.error('Error:', error);
@@ -512,18 +622,21 @@
       
       // Focus on input when page loads
       userInput.focus();
+      
+      // Load language preference
+      loadCurrentLanguage();
 
       // Add typing effect for initial message
       const initialMessage = chatbox.querySelector('.bot-message');
       const originalText = initialMessage.innerHTML;
-      initialMessage.innerHTML = `<div class="message-label">AyuSetu:</div>`;
+      initialMessage.innerHTML = `<div class="message-label">AyuSetu: <span class="language-tag">Auto-detected</span></div>`;
       
-      const text = "Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. How can I help you with your health concerns today?";
+      const text = "Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. I can communicate in English, Hindi, and Marathi - just type in your preferred language! How can I help you with your health concerns today?";
       let i = 0;
       
       function typeWriter() {
         if (i < text.length) {
-          initialMessage.innerHTML = `<div class="message-label">AyuSetu:</div>${text.substring(0, i + 1)}`;
+          initialMessage.innerHTML = `<div class="message-label">AyuSetu: <span class="language-tag">Auto-detected</span></div>${text.substring(0, i + 1)}`;
           i++;
           setTimeout(typeWriter, 30);
         }
