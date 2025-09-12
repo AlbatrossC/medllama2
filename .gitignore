@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+rasa_env/
+venv/
+
+# Rasa specific
+rasa_backend/models/
+rasa_backend/.rasa/
+rasa_backend/results/
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Environment files
+*.env

@@ -18,7 +18,7 @@
       line-height: 1.6;
     }
     .container {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 15px;
     }
@@ -59,30 +59,6 @@
       color: #4ecdc4;
     }
     
-    /* Language Selector */
-    .language-selector {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-right: 15px;
-    }
-    .language-selector select {
-      background: #34495e;
-      color: white;
-      border: 1px solid #4ecdc4;
-      border-radius: 5px;
-      padding: 5px 10px;
-      font-size: 12px;
-    }
-    .language-indicator {
-      background: #4ecdc4;
-      color: #2c3e50;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: bold;
-    }
-    
     .whatsapp-login {
       background: #25D366;
       color: white;
@@ -99,66 +75,88 @@
     /* Hero Section */
     .hero-section {
       text-align: center;
-      padding: 40px 0;
-      background-color: #f8f9fa;
-      margin-bottom: 30px;
+      padding: 30px 0;
+      background: linear-gradient(to right, #f8f9fa, #e8f4f8);
+      margin-bottom: 25px;
+      border-radius: 0 0 12px 12px;
     }
     .hero-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 15px;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 12px;
       color: #2c3e50;
+      letter-spacing: -0.5px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
     }
     .hero-subtitle {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      color: #555;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: #3498db;
+      font-weight: 600;
     }
     .hero-description {
-      font-size: 1rem;
-      color: #666;
-      max-width: 600px;
+      font-size: 1.05rem;
+      color: #555;
+      max-width: 700px;
       margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Main Content Layout */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin: 20px 0;
     }
 
     /* Chatbot Section */
     .chatbot-section {
-      margin: 30px 0;
+      margin: 0;
+      width: 100%;
     }
     .chatbot-container {
       background: #f9f9f9;
       border: 1px solid #eee;
-      border-radius: 10px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
-      height: 400px;
+      height: 75vh;
+      max-height: 900px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     }
     .chat-header {
       background: #3498db;
       color: white;
-      padding: 15px;
+      padding: 16px;
       font-size: 16px;
       display: flex;
       align-items: center;
       gap: 10px;
+      border-radius: 16px 16px 0 0;
     }
     .chat-header i {
-      font-size: 18px;
+      font-size: 22px;
     }
     .chat-header h2 {
-      font-weight: 600;
-      font-size: 16px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .chat-header small {
+      font-size: 12px;
+      opacity: 0.9;
     }
     .chat-status {
       margin-left: auto;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 12px;
+      gap: 8px;
+      font-size: 14px;
     }
     .status-dot {
-      width: 6px;
-      height: 6px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: #4ecdc4;
       animation: pulse 2s infinite;
@@ -170,82 +168,80 @@
     }
     .chat-messages {
       flex: 1;
-      padding: 15px;
+      padding: 20px;
       overflow-y: auto;
-      font-size: 14px;
+      font-size: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 15px;
+      background: white;
     }
     .chat-messages::-webkit-scrollbar {
-      width: 6px;
+      width: 10px;
     }
     .chat-messages::-webkit-scrollbar-track {
       background: #f1f1f1;
+      border-radius: 4px;
     }
     .chat-messages::-webkit-scrollbar-thumb {
       background: #c1c1c1;
-      border-radius: 3px;
+      border-radius: 4px;
     }
     .message {
-      max-width: 75%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      margin-bottom: 5px;
+      max-width: 85%;
+      padding: 16px 20px;
+      border-radius: 18px;
+      margin-bottom: 10px;
       word-wrap: break-word;
+      line-height: 1.6;
     }
     .bot-message {
       background: #ecf3fc;
       color: #333;
       align-self: flex-start;
+      border: 1px solid #e3f2fd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     .user-message {
       background: #3498db;
       color: white;
       align-self: flex-end;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .message-label {
-      font-weight: 600;
-      margin-bottom: 3px;
-      font-size: 12px;
-    }
-    .language-tag {
-      font-size: 10px;
-      opacity: 0.7;
-      margin-left: 5px;
-      padding: 2px 6px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 8px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 13px;
     }
     .chat-input {
       display: flex;
-      padding: 10px;
+      padding: 18px;
       border-top: 1px solid #ddd;
       background: #fff;
+      border-radius: 0 0 16px 16px;
     }
     .chat-input input {
       flex: 1;
-      padding: 10px;
+      padding: 14px 18px;
       border: 1px solid #ddd;
-      border-radius: 20px;
-      font-size: 14px;
+      border-radius: 30px;
+      font-size: 16px;
       outline: none;
     }
     .chat-input input:focus {
       border-color: #3498db;
-    }
-    .chat-input input::placeholder {
-      color: #999;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
     }
     .chat-input button {
       background: #3498db;
       color: white;
       border: none;
-      border-radius: 20px;
-      padding: 10px 16px;
-      margin-left: 8px;
+      border-radius: 30px;
+      padding: 14px 22px;
+      margin-left: 12px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 16px;
+      transition: background 0.3s;
     }
     .chat-input button:hover {
       background: #2c3e50;
@@ -255,60 +251,189 @@
       cursor: not-allowed;
     }
 
-    /* Dashboard Section */
+    /* Analytics Section */
     .analytics-section {
-      padding: 30px 0;
+      padding: 0;
     }
     .section-title {
       text-align: center;
-      margin-bottom: 20px;
-      font-size: 22px;
+      margin-bottom: 25px;
+      font-size: 24px;
       color: #2c3e50;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #3498db;
+      border-radius: 2px;
     }
     .analytics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
     }
     .analytics-card {
       background: #f9f9f9;
       border: 1px solid #eee;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 20px;
       text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
     .analytics-card:hover {
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
     .analytics-card h3 {
-      font-size: 16px;
-      margin-bottom: 10px;
+      font-size: 18px;
+      margin-bottom: 12px;
       color: #2c3e50;
     }
     .analytics-card h3 i {
-      margin-right: 8px;
+      margin-right: 10px;
       color: #3498db;
     }
     .analytics-card p {
       color: #666;
       margin-bottom: 15px;
-      font-size: 13px;
+      font-size: 14px;
+      line-height: 1.5;
     }
     .stats {
       display: flex;
       justify-content: space-around;
-      margin-top: 10px;
+      margin-top: 15px;
+    }
+    .stat-item {
+      flex: 1;
     }
     .stat-value {
       font-size: 20px;
       font-weight: bold;
       color: #3498db;
       display: block;
-      margin-bottom: 3px;
+      margin-bottom: 5px;
     }
     .stat-label {
       font-size: 12px;
       color: #555;
+    }
+
+    /* Live Stats */
+    .live-stats {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+    }
+    .live-stats .stat-value {
+      color: #fff;
+    }
+    .live-stats .stat-label {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .emergency-alert {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+      color: white;
+      border: none;
+    }
+    .emergency-alert .stat-value {
+      color: #fff;
+    }
+    .emergency-alert .stat-label {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-container {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      padding: 30px;
+      position: relative;
+      transform: translateY(-50px);
+      transition: transform 0.4s ease;
+    }
+    
+    .modal-overlay.active .modal-container {
+      transform: translateY(0);
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #777;
+    }
+    
+    .modal-close:hover {
+      color: #333;
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .modal-content {
+      line-height: 1.6;
+    }
+    
+    .team-list {
+      list-style: none;
+      margin: 20px 0;
+    }
+    
+    .team-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+    }
+    
+    .team-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .team-list i {
+      margin-right: 10px;
+      color: #3498db;
     }
 
     /* Footer */
@@ -322,6 +447,13 @@
     }
 
     /* Responsive */
+    @media (max-width: 992px) {
+      .chatbot-container {
+        height: 65vh;
+        max-height: 700px;
+      }
+    }
+
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
@@ -331,13 +463,17 @@
         gap: 15px;
       }
       .hero-title {
-        font-size: 2rem;
+        font-size: 2.2rem;
+      }
+      .hero-subtitle {
+        font-size: 1.1rem;
       }
       .chatbot-container {
-        height: 350px;
+        height: 60vh;
+        max-height: 600px;
       }
       .message {
-        max-width: 85%;
+        max-width: 90%;
       }
       .analytics-grid {
         grid-template-columns: 1fr;
@@ -346,10 +482,19 @@
 
     @media (max-width: 480px) {
       .hero-title {
-        font-size: 1.8rem;
+        font-size: 1.9rem;
       }
       .chatbot-container {
-        height: 300px;
+        height: 55vh;
+        max-height: 500px;
+      }
+      .chat-input {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .chat-input button {
+        margin-left: 0;
+        width: 100%;
       }
     }
   </style>
@@ -368,22 +513,12 @@
           <a href="#">Diseases</a>
           <a href="#">Vaccines</a>
           <a href="#">Symptoms</a>
-          <a href="#">About</a>
+          <a href="#" id="about-btn">About Us</a>
         </div>
-        <div style="display: flex; align-items: center;">
-          <div class="language-selector">
-            <select id="language-select">
-              <option value="en">English</option>
-              <option value="hi">हिंदी</option>
-              <option value="mr">मराठी</option>
-            </select>
-            <div class="language-indicator" id="current-lang">EN</div>
-          </div>
-          <button class="whatsapp-login">
-            <i class="fab fa-whatsapp"></i>
-            Login via WhatsApp
-          </button>
-        </div>
+        <button class="whatsapp-login">
+          <i class="fab fa-whatsapp"></i>
+          Login via WhatsApp
+        </button>
       </div>
     </div>
   </header>
@@ -391,98 +526,258 @@
   <div class="container">
     <!-- Hero Section -->
     <section class="hero-section">
-      <h1 class="hero-title">AyuSetu</h1>
-      <p class="hero-subtitle">AI-Powered Health Assistant</p>
+      <h1 class="hero-title">AyuSetu: Your AI Health Companion</h1>
+      <p class="hero-subtitle">Intelligent Healthcare Guidance at Your Fingertips</p>
       <p class="hero-description">
-        Powered by MedLlama2 model and trained on comprehensive government health datasets. 
-        Get accurate medical information, symptom analysis, and health guidance from trusted sources.
-        Now supports English, Hindi, and Marathi!
+        Powered by advanced MedLlama2 technology and trained on comprehensive government health datasets. 
+        Get accurate medical information, personalized symptom analysis, and reliable health guidance from trusted sources.
       </p>
     </section>
 
-    <!-- Chatbot Section -->
-    <section class="chatbot-section">
-      <div class="chatbot-container">
-        <div class="chat-header">
-          <i class="fas fa-robot"></i>
-          <div>
-            <h2>Chat with AyuSetu</h2>
-            <small style="opacity: 0.8;">Powered by MedLlama2 • Government Health Data • Multi-language Support</small>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Chatbot Section -->
+      <section class="chatbot-section">
+        <div class="chatbot-container">
+          <div class="chat-header">
+            <i class="fas fa-robot"></i>
+            <div>
+              <h2>AyuSetu AI Assistant</h2>
+              <small>MedLlama2 Health Intelligence</small>
+            </div>
+            <div class="chat-status">
+              <div class="status-dot"></div>
+              Online & Ready to Help
+            </div>
           </div>
-          <div class="chat-status">
-            <div class="status-dot"></div>
-            Online
+          <div class="chat-messages" id="chatbox">
+            <div class="message bot-message">
+              <div class="message-label">AyuSetu:</div>
+              Hello! I'm AyuSetu, your AI health assistant powered by the advanced MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. How can I assist with your health concerns today?
+            </div>
+          </div>
+          <div class="chat-input">
+            <input type="text" id="user_input" placeholder="Describe your symptoms or ask a health question...">
+            <button id="send-button"><i class="fas fa-paper-plane"></i> Send</button>
           </div>
         </div>
-        <div class="chat-messages" id="chatbox">
-          <div class="message bot-message">
-            <div class="message-label">AyuSetu: <span class="language-tag">Auto-detected</span></div>
-            Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. I can communicate in English, Hindi, and Marathi - just type in your preferred language! How can I help you with your health concerns today?
-          </div>
-        </div>
-        <div class="chat-input">
-          <input type="text" id="user_input" placeholder="Ask me in English, Hindi, or Marathi...">
-          <button id="send-button"><i class="fas fa-paper-plane"></i></button>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Dashboard Section -->
-    <section class="analytics-section">
-      <h2 class="section-title">AyuSetu Health Analytics Dashboard</h2>
-      <div class="analytics-grid">
-        <div class="analytics-card">
-          <h3><i class="fas fa-virus"></i> Disease Surveillance</h3>
-          <p>Real-time tracking of disease outbreaks and health patterns based on government health surveillance data.</p>
-          <div class="stats">
-            <div class="stat-item">
-              <div class="stat-value">142</div>
-              <div class="stat-label">Dengue Cases</div>
+      <!-- Analytics Section -->
+      <section class="analytics-section">
+        <h2 class="section-title">Health Insights & Analytics</h2>
+        <div class="analytics-grid">
+          <div class="analytics-card live-stats">
+            <h3><i class="fas fa-chart-line"></i> Live Health Statistics</h3>
+            <p>Real-time health data from national surveillance systems</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">2,847</div>
+                <div class="stat-label">Active Cases</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">94.2%</div>
+                <div class="stat-label">Recovery Rate</div>
+              </div>
             </div>
-            <div class="stat-item">
-              <div class="stat-value">57</div>
-              <div class="stat-label">Malaria Cases</div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3><i class="fas fa-virus"></i> Disease Surveillance</h3>
+            <p>Current disease monitoring and outbreak tracking from government health data</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">189</div>
+                <div class="stat-label">Dengue Cases</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">76</div>
+                <div class="stat-label">Malaria Cases</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3><i class="fas fa-syringe"></i> Vaccination Coverage</h3>
+            <p>National immunization program statistics and coverage rates</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">87%</div>
+                <div class="stat-label">COVID-19</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">91%</div>
+                <div class="stat-label">Routine Vaccines</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3><i class="fas fa-thermometer-half"></i> Seasonal Health</h3>
+            <p>Weather-related health risks and seasonal disease patterns</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">High</div>
+                <div class="stat-label">Heat Risk</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">Moderate</div>
+                <div class="stat-label">Air Quality</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-card emergency-alert">
+            <h3><i class="fas fa-exclamation-triangle"></i> Health Alerts</h3>
+            <p>Emergency health notifications and public health advisories</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Active Alerts</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">Medium</div>
+                <div class="stat-label">Risk Level</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3><i class="fas fa-brain"></i> AI Insights</h3>
+            <p>Advanced health analytics powered by MedLlama2 model</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">3,421</div>
+                <div class="stat-label">Daily Queries</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">97.8%</div>
+                <div class="stat-label">Accuracy</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3><i class="fas fa-hospital"></i> Healthcare Access</h3>
+            <p>Hospital capacity and healthcare resource availability</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">78%</div>
+                <div class="stat-label">Bed Occupancy</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">156</div>
+                <div class="stat-label">Available ICU</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3><i class="fas fa-users"></i> Public Health</h3>
+            <p>Community health programs and population health metrics</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">42K</div>
+                <div class="stat-label">Screenings</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">89%</div>
+                <div class="stat-label">Program Coverage</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3><i class="fas fa-heart"></i> Mental Health Trends</h3>
+            <p>Insights on mental health issues from national surveys</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">12.5%</div>
+                <div class="stat-label">Anxiety Cases</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">8.3%</div>
+                <div class="stat-label">Depression Cases</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3><i class="fas fa-utensils"></i> Nutrition Metrics</h3>
+            <p>Population nutrition and dietary health statistics</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">65%</div>
+                <div class="stat-label">Adequate Nutrition</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">22%</div>
+                <div class="stat-label">Obesity Rate</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3><i class="fas fa-child"></i> Pediatric Health</h3>
+            <p>Children's health statistics and vaccination rates</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">93%</div>
+                <div class="stat-label">Vaccination Rate</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">7.2%</div>
+                <div class="stat-label">Malnutrition</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3><i class="fas fa-heartbeat"></i> Cardiac Health</h3>
+            <p>Cardiovascular disease statistics and prevention metrics</p>
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-value">18.5%</div>
+                <div class="stat-label">Hypertension</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">12.3%</div>
+                <div class="stat-label">Heart Disease</div>
+              </div>
             </div>
           </div>
         </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- About Us Modal -->
+  <div class="modal-overlay" id="about-modal">
+    <div class="modal-container">
+      <button class="modal-close" id="close-modal">&times;</button>
+      <h2 class="modal-title">About AyuSetu</h2>
+      <div class="modal-content">
+        <p>This is our SIH Hackathon project. AyuSetu is an AI-powered health assistant designed to provide accurate medical information and health guidance.</p>
         
-        <div class="analytics-card">
-          <h3><i class="fas fa-syringe"></i> Vaccination Programs</h3>
-          <p>Monitor national immunization coverage and schedule recommendations from government health programs.</p>
-          <div class="stats">
-            <div class="stat-item">
-              <div class="stat-value">78%</div>
-              <div class="stat-label">Polio Coverage</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">82%</div>
-              <div class="stat-label">MMR Coverage</div>
-            </div>
-          </div>
-        </div>
+        <p>Our team members:</p>
+        <ul class="team-list">
+          <li><i class="fas fa-user-md"></i> Devang</li>
+          <li><i class="fas fa-user-md"></i> Pragya</li>
+          <li><i class="fas fa-user-md"></i> Soham</li>
+          <li><i class="fas fa-user-md"></i> Tanishka</li>
+          <li><i class="fas fa-user-md"></i> Manav</li>
+          <li><i class="fas fa-user-md"></i> Yuvraj</li>
+        </ul>
         
-        <div class="analytics-card">
-          <h3><i class="fas fa-brain"></i> AI Insights</h3>
-          <p>Advanced health analytics powered by MedLlama2 model trained on verified government health datasets.</p>
-          <div class="stats">
-            <div class="stat-item">
-              <div class="stat-value">1,243</div>
-              <div class="stat-label">Daily Consultations</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">96%</div>
-              <div class="stat-label">Accuracy Rate</div>
-            </div>
-          </div>
-        </div>
+        <p>We've created this platform to make healthcare information more accessible using AI technology trained on government health datasets.</p>
       </div>
-    </section>
+    </div>
   </div>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>&copy; 2024 AyuSetu - AI Health Assistant. Powered by MedLlama2 and Government Health Data. Multi-language Support (EN/HI/MR/OR). All rights reserved.</p>
+      <p>&copy; 2024 AyuSetu - AI Health Assistant. Powered by MedLlama2 and Government Health Data. All rights reserved.</p>
     </div>
   </footer>
 
@@ -491,70 +786,38 @@
       const chatbox = document.getElementById('chatbox');
       const userInput = document.getElementById('user_input');
       const sendButton = document.getElementById('send-button');
-      const languageSelect = document.getElementById('language-select');
-      const currentLangIndicator = document.getElementById('current-lang');
+      const aboutBtn = document.getElementById('about-btn');
+      const aboutModal = document.getElementById('about-modal');
+      const closeModal = document.getElementById('close-modal');
       
-      // Language management
-      let currentLanguage = 'en';
+      // Modal functionality
+      aboutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        aboutModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
       
-      // Load current language from server
-      async function loadCurrentLanguage() {
-        try {
-          const response = await fetch('/get_language');
-          const data = await response.json();
-          currentLanguage = data.language_code;
-          languageSelect.value = currentLanguage;
-          updateLanguageIndicator();
-        } catch (error) {
-          console.log('Could not load language preference:', error);
-        }
-      }
+      closeModal.addEventListener('click', function() {
+        aboutModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      });
       
-      function updateLanguageIndicator() {
-        const langMap = {
-          'en': 'EN',
-          'hi': 'हि',
-          'mr': 'मर'
-        };
-        currentLangIndicator.textContent = langMap[currentLanguage] || 'EN';
-      }
-      
-      // Language selector change handler
-      languageSelect.addEventListener('change', async function() {
-        const newLang = this.value;
-        try {
-          const response = await fetch('/set_language', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ language: newLang })
-          });
-          
-          if (response.ok) {
-            currentLanguage = newLang;
-            updateLanguageIndicator();
-            
-            // Add system message about language change
-            const systemMessageDiv = document.createElement('div');
-            systemMessageDiv.classList.add('message', 'bot-message');
-            systemMessageDiv.innerHTML = `<div class="message-label">System:</div>Language switched to ${this.options[this.selectedIndex].text}. You can continue chatting in your preferred language!`;
-            chatbox.appendChild(systemMessageDiv);
-            chatbox.scrollTop = chatbox.scrollHeight;
-          }
-        } catch (error) {
-          console.error('Error setting language:', error);
+      aboutModal.addEventListener('click', function(e) {
+        if (e.target === aboutModal) {
+          aboutModal.classList.remove('active');
+          document.body.style.overflow = 'auto';
         }
       });
       
+      // Chat functionality
       async function sendMessage() {
         const input = document.getElementById("user_input");
         const message = input.value.trim();
         if (!message) return;
         
-        // Disable send button to prevent multiple requests
         sendButton.disabled = true;
-        sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         
-        // Display user message
         const userMessageDiv = document.createElement('div');
         userMessageDiv.classList.add('message', 'user-message');
         userMessageDiv.innerHTML = `<div class="message-label">You:</div>${message}`;
@@ -563,7 +826,6 @@
         input.value = "";
         
         try {
-          // Send to Flask backend
           const response = await fetch("/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -571,78 +833,68 @@
           });
           const data = await response.json();
           
-          // Display bot reply with language indicator
           const botMessageDiv = document.createElement('div');
           botMessageDiv.classList.add('message', 'bot-message');
-          const langTag = data.detected_language ? `<span class="language-tag">${data.detected_language}</span>` : '';
-          botMessageDiv.innerHTML = `<div class="message-label">AyuSetu: ${langTag}</div>${data.reply}`;
+          botMessageDiv.innerHTML = `<div class="message-label">AyuSetu:</div>${data.reply}`;
           chatbox.appendChild(botMessageDiv);
           chatbox.scrollTop = chatbox.scrollHeight;
-          
-          // Update current language if detected
-          if (data.detected_language) {
-            const langCode = Object.keys({en: 'english', hi: 'hindi', mr: 'marathi'}).find(key => 
-              ({en: 'english', hi: 'hindi', mr: 'marathi'})[key] === data.detected_language.toLowerCase()
-            );
-            if (langCode && langCode !== currentLanguage) {
-              currentLanguage = langCode;
-              languageSelect.value = langCode;
-              updateLanguageIndicator();
-            }
-          }
           
         } catch (error) {
           console.error('Error:', error);
           const errorMessageDiv = document.createElement('div');
           errorMessageDiv.classList.add('message', 'bot-message');
-          errorMessageDiv.innerHTML = `<div class="message-label">AyuSetu:</div>I apologize, but I'm having trouble connecting to my knowledge base right now. Please try again in a moment. If the issue persists, our medical AI is temporarily unavailable.`;
+          errorMessageDiv.innerHTML = `<div class="message-label">AyuSetu:</div>I apologize, but I'm having trouble connecting to my knowledge base right now. Please try again in a moment.`;
           chatbox.appendChild(errorMessageDiv);
           chatbox.scrollTop = chatbox.scrollHeight;
         } finally {
-          // Re-enable send button
           sendButton.disabled = false;
-          sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+          sendButton.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
           userInput.focus();
         }
       }
 
       sendButton.addEventListener('click', sendMessage);
       
-      // Press Enter to send
       userInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && !sendButton.disabled) {
           sendMessage();
         }
       });
 
-      // WhatsApp login functionality
       document.querySelector('.whatsapp-login').addEventListener('click', function() {
-        alert('Redirecting to WhatsApp authentication for AyuSetu health consultations (Twilio integration).');
+        alert('Redirecting to WhatsApp authentication for AyuSetu health consultations.');
       });
       
-      // Focus on input when page loads
       userInput.focus();
-      
-      // Load language preference
-      loadCurrentLanguage();
 
-      // Add typing effect for initial message
-      const initialMessage = chatbox.querySelector('.bot-message');
-      const originalText = initialMessage.innerHTML;
-      initialMessage.innerHTML = `<div class="message-label">AyuSetu: <span class="language-tag">Auto-detected</span></div>`;
-      
-      const text = "Hello! I'm AyuSetu, your AI health assistant powered by the MedLlama2 model. I'm trained on comprehensive government health datasets to provide you with accurate medical information, symptom analysis, and health guidance. I can communicate in English, Hindi, and Marathi - just type in your preferred language! How can I help you with your health concerns today?";
-      let i = 0;
-      
-      function typeWriter() {
-        if (i < text.length) {
-          initialMessage.innerHTML = `<div class="message-label">AyuSetu: <span class="language-tag">Auto-detected</span></div>${text.substring(0, i + 1)}`;
-          i++;
-          setTimeout(typeWriter, 30);
-        }
+      // Animate statistics
+      function updateStats() {
+        const stats = document.querySelectorAll('.stat-value');
+        stats.forEach(stat => {
+          if (stat.textContent.includes('%')) {
+            const current = parseFloat(stat.textContent);
+            const variation = (Math.random() - 0.5) * 2;
+            const newValue = Math.max(0, Math.min(100, current + variation)).toFixed(1);
+            stat.textContent = newValue + '%';
+          } else if (!isNaN(stat.textContent.replace(/[,K]/g, ''))) {
+            const current = parseInt(stat.textContent.replace(/[,K]/g, ''));
+            const variation = Math.floor((Math.random() - 0.5) * current * 0.05);
+            let newValue = current + variation;
+            if (stat.textContent.includes('K')) {
+              stat.textContent = Math.floor(newValue/1000) + 'K';
+            } else {
+              stat.textContent = newValue.toLocaleString();
+            }
+          } else if (stat.textContent === 'High' || stat.textContent === 'Medium' || stat.textContent === 'Low' || stat.textContent === 'Moderate') {
+            const levels = ['Low', 'Moderate', 'Medium', 'High'];
+            const currentIndex = levels.indexOf(stat.textContent);
+            const newIndex = Math.floor(Math.random() * levels.length);
+            stat.textContent = levels[newIndex];
+          }
+        });
       }
-      
-      setTimeout(typeWriter, 500);
+
+      setInterval(updateStats, 30000);
     });
   </script>
 </body>

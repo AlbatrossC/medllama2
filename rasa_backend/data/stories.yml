@@ -1,0 +1,11 @@
+version: "3.1"
+stories:
+- story: Handle call_ai_agent
+  steps:
+    - intent: call_ai_agent
+    - action: action_call_ai_agent
+
+- story: Handle check_schedule
+  steps:
+    - intent: check_schedule
+    - action: action_check_schedule

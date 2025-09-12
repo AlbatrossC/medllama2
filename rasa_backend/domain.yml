@@ -1,0 +1,13 @@
+version: "3.1"
+
+intents:
+  - call_ai_agent
+  - check_schedule
+
+entities:
+  - disease
+  - user_id
+
+actions:
+  - action_call_ai_agent
+  - action_check_schedule

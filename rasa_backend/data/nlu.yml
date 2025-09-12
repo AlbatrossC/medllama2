@@ -1,0 +1,15 @@
+version: "3.1"
+nlu:
+- intent: call_ai_agent
+  examples: |
+    - What are symptoms of [COVID19](disease)?
+    - Tell me about [AIDS](disease)
+    - Explain treatment of [malaria](disease)
+    - Can you tell me about [cancer](disease)?
+
+- intent: check_schedule
+  examples: |
+    - Check my next schedule. number = [9000000001](user_id)
+    - Show my appointment. my id is [9000000002](user_id)
+    - What is my next schedule? id [9000000001](user_id)
+    - Can you check my schedule with user [9000000002](user_id)?

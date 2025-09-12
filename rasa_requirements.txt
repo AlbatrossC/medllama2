@@ -1,0 +1,5 @@
+rasa
+transformers
+spacy
+dotenv
+python-dotenv
