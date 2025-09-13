@@ -12,6 +12,7 @@ from datetime import datetime
 from colorama import Fore, Style, init
 import traceback
 from dotenv import load_dotenv
+import uuid
 
 # Load environment
 load_dotenv()
@@ -26,6 +27,11 @@ RASA_URL = os.environ.get("RASA_URL", "http://localhost:5005/model/parse")
 TWILIO_SID = os.environ.get("TWILIO_SID")
 TWILIO_AUTH = os.environ.get("TWILIO_AUTH")
 TWILIO_WHATSAPP_NUMBER = os.environ.get("TWILIO_WHATSAPP_NUMBER")
+
+# Azure Translator configuration
+AZURE_TRANSLATOR_KEY = os.environ.get("AZURE_TRANSLATOR_KEY")
+AZURE_TRANSLATOR_ENDPOINT = os.environ.get("AZURE_TRANSLATOR_ENDPOINT", "https://api.cognitive.microsofttranslator.com")
+AZURE_TRANSLATOR_REGION = os.environ.get("AZURE_TRANSLATOR_REGION", "global")
 
 # Twilio client will be None if not configured (safe-guard)
 client = None
@@ -77,12 +83,93 @@ def preview(obj, length=400):
         s = str(obj)
     return s if len(s) <= length else s[:length] + "..."
 
+class AzureTranslator:
+    def __init__(self):
+        self.key = AZURE_TRANSLATOR_KEY
+        self.endpoint = AZURE_TRANSLATOR_ENDPOINT
+        self.region = AZURE_TRANSLATOR_REGION
+        self.detect_url = f"{self.endpoint}/detect"
+        self.translate_url = f"{self.endpoint}/translate"
+        
+    def _make_request(self, url, params, data):
+        """Make request to Azure Translator API"""
+        if not self.key:
+            raise Exception("Azure Translator key not configured")
+            
+        headers = {
+            'Ocp-Apim-Subscription-Key': self.key,
+            'Ocp-Apim-Subscription-Region': self.region,
+            'Content-type': 'application/json',
+            'X-ClientTraceId': str(uuid.uuid4())
+        }
+        
+        response = requests.post(url, params=params, headers=headers, json=data, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    
+    def detect_language(self, text):
+        """Detect language of input text"""
+        try:
+            params = {'api-version': '3.0'}
+            data = [{'text': text}]
+            
+            result = self._make_request(self.detect_url, params, data)
+            
+            if result and len(result) > 0:
+                detected = result[0]
+                language = detected.get('language', 'unknown')
+                confidence = detected.get('score', 0.0)
+                
+                logger.info("Language Detection", f"{language} (confidence: {confidence:.2f})", Fore.CYAN)
+                return language, confidence
+            
+            return 'unknown', 0.0
+            
+        except Exception as e:
+            logger.error(f"Language detection failed: {e}")
+            return 'unknown', 0.0
+    
+    def translate_text(self, text, target_language, source_language=None):
+        """Translate text to target language"""
+        try:
+            params = {
+                'api-version': '3.0',
+                'to': target_language
+            }
+            
+            if source_language and source_language != 'unknown':
+                params['from'] = source_language
+                
+            data = [{'text': text}]
+            
+            result = self._make_request(self.translate_url, params, data)
+            
+            if result and len(result) > 0 and 'translations' in result[0]:
+                translated = result[0]['translations'][0]['text']
+                detected_lang = result[0].get('detectedLanguage', {}).get('language', source_language)
+                
+                logger.info("Translation", f"{source_language or 'auto'} → {target_language}", Fore.CYAN)
+                logger.info("Original", text[:100] + "..." if len(text) > 100 else text, Fore.YELLOW)
+                logger.info("Translated", translated[:100] + "..." if len(translated) > 100 else translated, Fore.YELLOW)
+                
+                return translated, detected_lang
+            
+            return text, source_language  # Return original if translation fails
+            
+        except Exception as e:
+            logger.error(f"Translation failed: {e}")
+            return text, source_language  # Return original text on error
+
+# Initialize translator
+translator = AzureTranslator()
+
 # Startup banner
 def startup_banner():
     logger.info("SERVER START", f"Started at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", Fore.CYAN)
     logger.info("Ollama URL", OLLAMA_URL)
     logger.info("Rasa URL", RASA_URL)
     logger.info("Twilio WhatsApp", TWILIO_WHATSAPP_NUMBER or "Not configured")
+    logger.info("Azure Translator", "Configured" if AZURE_TRANSLATOR_KEY else "Not configured")
 
 def classify_intent(text):
     """Return (intent_name, confidence, entities)"""
@@ -97,7 +184,6 @@ def classify_intent(text):
     except Exception as e:
         logger.error(f"RASA error: {e}")
         return None, 0, []
-
 
 def call_ollama(user_message, model="medllama2"):
     try:
@@ -129,6 +215,53 @@ def call_ollama(user_message, model="medllama2"):
         logger.error(f"Ollama call failed: {e}")
         return "Sorry, I couldn't contact the AI service."
 
+def process_message_with_translation(user_message):
+    """
+    Process message with language detection and translation:
+    1. Detect input language
+    2. If not English, translate to English
+    3. Process with Ollama
+    4. If original was not English, translate response back
+    """
+    original_language = 'en'
+    translated_to_english = user_message
+    
+    if AZURE_TRANSLATOR_KEY:
+        try:
+            # Detect language
+            detected_lang, confidence = translator.detect_language(user_message)
+            original_language = detected_lang
+            
+            # If not English and confidence is good, translate to English
+            if detected_lang != 'en' and confidence > 0.5:
+                translated_to_english, _ = translator.translate_text(
+                    user_message, 
+                    target_language='en', 
+                    source_language=detected_lang
+                )
+            
+        except Exception as e:
+            logger.error(f"Translation preprocessing failed: {e}")
+            # Continue with original message if translation fails
+    
+    # Call Ollama with English message
+    english_response = call_ollama(translated_to_english)
+    
+    # If original was not English, translate response back
+    final_response = english_response
+    if AZURE_TRANSLATOR_KEY and original_language != 'en' and original_language != 'unknown':
+        try:
+            final_response, _ = translator.translate_text(
+                english_response,
+                target_language=original_language,
+                source_language='en'
+            )
+        except Exception as e:
+            logger.error(f"Translation postprocessing failed: {e}")
+            # Return English response if back-translation fails
+    
+    return final_response
+
 def handle_intent(user_number, msg, intent, confidence, entities, channel="whatsapp"):
     logger.start(channel, "intent-handler")
     logger.info("From", user_number)
@@ -138,8 +271,8 @@ def handle_intent(user_number, msg, intent, confidence, entities, channel="whats
 
     try:
         if intent == "call_ai_agent":
-            logger.info("Action", "Call AI Agent")
-            reply = call_ollama(msg)
+            logger.info("Action", "Call AI Agent with Translation")
+            reply = process_message_with_translation(msg)
 
             if channel == "whatsapp" and client:
                 try:
@@ -261,6 +394,16 @@ def health_check():
         health["services"]["database"] = "running"
     except:
         health["services"]["database"] = "down"
+    
+    # Check Azure Translator
+    try:
+        if AZURE_TRANSLATOR_KEY:
+            translator.detect_language("test")
+            health["services"]["azure_translator"] = "running"
+        else:
+            health["services"]["azure_translator"] = "not_configured"
+    except:
+        health["services"]["azure_translator"] = "down"
 
     logger.info("Health", preview(health))
     return jsonify(health)
@@ -268,4 +411,4 @@ def health_check():
 if __name__ == "__main__":
     startup_banner()
     logger.success("Server starting on http://0.0.0.0:5000")
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
